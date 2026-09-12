@@ -1,0 +1,20 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "savedTime": 1788602133043
+  },
+  "modules": {
+    "HUD": {
+      "enabled": true,
+      "keyBind": 0
+    },
+    "FullBright": {
+      "enabled": true,
+      "keyBind": 0
+    },
+    "Sprint": {
+      "enabled": true,
+      "keyBind": 0
+    }
+  }
+}

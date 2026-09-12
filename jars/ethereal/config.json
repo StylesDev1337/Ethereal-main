@@ -1,0 +1,173 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "savedTime": 1789189279149
+  },
+  "modules": {
+    "Target": {
+      "enabled": true,
+      "keyBind": 0,
+      "booleanValues": {
+        "Villagers": true,
+        "Animals": true,
+        "Mobs": true,
+        "Bosses": true,
+        "ThroughWalls": false,
+        "Silverfish": true,
+        "Players": true
+      },
+      "numberValues": {
+        "FOV": 360.0,
+        "SwitchDelay": 150.0
+      },
+      "modeValues": {
+        "Sort": "Distance",
+        "SwitchMode": "Switch"
+      },
+      "stringValues": {}
+    },
+    "KillAura": {
+      "enabled": false,
+      "keyBind": 19,
+      "booleanValues": {
+        "RequirePress": false,
+        "ThroughWalls": false
+      },
+      "numberValues": {
+        "MaxCPS": 20.0,
+        "SwingRange": 6.0,
+        "AttackRange": 6.0,
+        "AngleStep": 90.0,
+        "MinCPS": 20.0
+      },
+      "modeValues": {
+        "AutoBlock": "Vanilla",
+        "Rotations": "Packet"
+      },
+      "stringValues": {}
+    },
+    "TargetHud": {
+      "enabled": true,
+      "keyBind": 45,
+      "booleanValues": {},
+      "numberValues": {
+        "PosX": 659.0,
+        "PosY": 266.0
+      },
+      "modeValues": {},
+      "stringValues": {}
+    },
+    "ThrowableAura": {
+      "enabled": false,
+      "keyBind": 44,
+      "booleanValues": {
+        "AutoSwitch": true,
+        "Debug": false
+      },
+      "numberValues": {
+        "Range": 12.0
+      },
+      "modeValues": {},
+      "stringValues": {}
+    },
+    "Animations": {
+      "enabled": true,
+      "keyBind": 0,
+      "booleanValues": {
+        "OddSwing": true
+      },
+      "numberValues": {},
+      "modeValues": {
+        "Mode": "OldPushdown",
+        "SwingSpeed": "10"
+      },
+      "stringValues": {}
+    },
+    "HUD": {
+      "enabled": true,
+      "keyBind": 0,
+      "booleanValues": {
+        "Draw Parentheses": true,
+        "Draw WaterMark": true,
+        "Draw Username": true
+      },
+      "numberValues": {},
+      "modeValues": {
+        "Themes": "Grey"
+      },
+      "stringValues": {}
+    },
+    "FullBright": {
+      "enabled": true,
+      "keyBind": 0,
+      "booleanValues": {},
+      "numberValues": {
+        "Value": 20.0
+      },
+      "modeValues": {},
+      "stringValues": {}
+    },
+    "Sprint": {
+      "enabled": true,
+      "keyBind": 0,
+      "booleanValues": {
+        "Blocking": true
+      },
+      "numberValues": {},
+      "modeValues": {
+        "Mode": "Toggle"
+      },
+      "stringValues": {}
+    },
+    "Scaffold": {
+      "enabled": false,
+      "keyBind": 46,
+      "booleanValues": {
+        "AutoSwitchFromInv": true,
+        "Silent": true,
+        "DisableConflicts": true,
+        "Debug": false
+      },
+      "numberValues": {
+        "Delay": 0.0
+      },
+      "modeValues": {},
+      "stringValues": {}
+    },
+    "Noslow": {
+      "enabled": true,
+      "keyBind": 0,
+      "booleanValues": {
+        "Bow Sprint": true,
+        "Sword Sprint": true,
+        "Food Sprint": true
+      },
+      "numberValues": {
+        "Bow Forward": 5.0,
+        "Sword Strafe": 5.0,
+        "Food Forward": 5.0,
+        "Food Strafe": 5.0,
+        "Sword Forward": 5.0,
+        "Bow Strafe": 5.0
+      },
+      "modeValues": {
+        "Mode": "Vanilla"
+      },
+      "stringValues": {}
+    },
+    "Rotations": {
+      "enabled": true,
+      "keyBind": 0,
+      "booleanValues": {
+        "Realistic": true,
+        "Body": true,
+        "SmoothRotations": false
+      },
+      "numberValues": {
+        "SmoothFactor": 0.15
+      },
+      "modeValues": {},
+      "stringValues": {}
+    }
+  }
+}
