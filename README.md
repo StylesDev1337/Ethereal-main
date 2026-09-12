@@ -18,7 +18,8 @@ Ethereal 是一个从零构建的 Minecraft 1.8.8 客户端，目标是在**不�
 
 ## 开发者
 
-@kojkl deepseek
+- [@kojkl](https://github.com/StylesDev1337) — 项目作者
+- DeepSeek — AI 协助开发
 
 ---
 
