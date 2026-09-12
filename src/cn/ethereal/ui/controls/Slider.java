@@ -1,7 +1,7 @@
 package cn.ethereal.ui.controls;
 
 import cn.ethereal.ui.values.NumberValue;
-import net.minecraft.client.gui.Gui;
+import cn.ethereal.util.render.RenderUtil;
 import net.minecraft.util.MathHelper;
 
 public class Slider extends Control {
@@ -12,25 +12,43 @@ public class Slider extends Control {
         super(name);
         this.value = value;
         this.width = 100;
-        this.height = 20;
+        this.height = 22;
     }
 
     @Override
     public void draw(int mouseX, int mouseY, float partialTicks) {
-        // 绘制名称和当前值
-        String displayText = name + ": " + String.format("%.1f", value.getValue());
-        font.drawStringWithShadow(displayText, x, y + 2, 0xFFFFFF);
+        // 名字 + 值
+        String displayName = name;
+        String displayValue = String.format("%.1f", value.getValue());
 
-        // 绘制滑条背景
-        int sliderY = y + height - 5;
-        Gui.drawRect(x, sliderY, x + width, sliderY + 4, 0xFF444444);
+        font.drawStringWithShadow(displayName, x, y, 0xFFFFFFFF);
+        font.drawStringWithShadow(displayValue,
+                x + width - font.getStringWidth(displayValue), y, 0xFF4A9EFF);
 
-        // 计算滑块位置
+        // 轨道
+        int barY = y + height - 7;
+        int barH = 3;
+        RenderUtil.drawRoundedRect(x, barY, width, barH, barH / 2F, 0xFF2A2A2A);
+
+        // 进度
         float percent = (float) ((value.getValue() - value.getMin()) / (value.getMax() - value.getMin()));
-        int sliderX = x + (int) (percent * width);
+        percent = MathHelper.clamp_float(percent, 0F, 1F);
+        int fillW = (int) (width * percent);
+        if (fillW > 0) {
+            RenderUtil.drawRoundedRect(x, barY, fillW, barH, barH / 2F, 0xFF4A9EFF);
+        }
 
-        // 绘制滑块
-        Gui.drawRect(sliderX - 2, sliderY - 2, sliderX + 2, sliderY + 6, 0xFF00FF00);
+        // 滑块
+        int knobX = x + fillW;
+        int knobSize = 10;
+        int knobY = barY + barH / 2 - knobSize / 2;
+
+        // hover/drag 放大
+        boolean active = dragging || isHovered(mouseX, mouseY);
+        int actualKnobSize = active ? 12 : 10;
+        int adjust = (actualKnobSize - knobSize) / 2;
+        RenderUtil.drawRoundedRect(knobX - actualKnobSize / 2F, knobY - adjust,
+                actualKnobSize, actualKnobSize, actualKnobSize / 2F, 0xFFFFFFFF);
     }
 
     @Override

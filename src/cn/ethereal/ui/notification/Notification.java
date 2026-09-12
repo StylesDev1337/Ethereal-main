@@ -1,67 +1,85 @@
 package cn.ethereal.ui.notification;
 
+import cn.ethereal.util.render.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.MathHelper;
-import org.lwjgl.opengl.GL11;
 
 public class Notification {
     private static final Minecraft mc = Minecraft.getMinecraft();
     private static final FontRenderer font = mc.fontRendererObj;
 
+    // ==================== 类型 ====================
+    public enum Type {
+        SUCCESS(0xFF4ADE80),
+        ERROR  (0xFFEF4444),
+        WARN   (0xFFFBBA24),
+        INFO   (0xFF4A9EFF);
+
+        public final int color;
+        Type(int color) { this.color = color; }
+    }
+
     private final String title;
     private final String message;
-    private final boolean enabled;
+    private final Type type;
 
     private final long startTime;
     private final long duration;
 
-    // 位置 / 透明度
-    private float currentY;         // 当前屏幕 Y（平滑逼近 stackY）
-    private float stackY;           // 目标堆叠 Y（由 Manager 每帧设置）
+    private float currentY;
+    private float stackY;
     private boolean stackInit = false;
     private float animationAlpha;
 
     // ==================== 常量 ====================
-    private static final float MOVE_SPEED = 0.30F;    // Y 缓动速率
-    private static final float ALPHA_SPEED = 0.25F;   // 透明缓动速率
+    private static final float MOVE_SPEED = 0.30F;
+    private static final float ALPHA_SPEED = 0.25F;
     private static final long DEFAULT_DURATION = 2200;
 
     private static final long FADE_IN_TIME = 180;
     private static final long FADE_OUT_TIME = 400;
+    private static final float ENTRY_OFFSET = 24F;
 
-    private static final float ENTRY_OFFSET = 24F;    // 入场时在 stackY 下方多少像素
-
-    // 布局（Manager 会用到 LINE_SPACING）
-    public static final int PADDING_X = 7;
-    public static final int PADDING_Y = 5;
-    public static final int BAR_WIDTH = 2;
+    // 布局
+    public static final int PADDING_X = 9;
+    public static final int PADDING_Y = 6;
     public static final int GAP = 3;
-    public static final int LINE_SPACING = 4;
+    public static final int LINE_SPACING = 5;
+    public static final int RADIUS = 6;
+
+    public static final int ICON_SIZE = 14;
+    public static final int ICON_MARGIN = 6;
+    public static final int ICON_INNER = 6;
 
     // 颜色
-    private static final int BG_COLOR = 0xB0101010;
+    private static final int BG_COLOR = 0xF0181818;
+    private static final int BORDER_COLOR = 0xFF2A2A2A;
     private static final int TITLE_COLOR = 0xFFFFFF;
-    private static final int ACCENT_ON = 0x55FF55;
-    private static final int ACCENT_OFF = 0xFF5555;
-    private static final int MSG_COLOR_ON = 0xAAAAAA;
-    private static final int MSG_COLOR_OFF = 0xAA8888;
+    private static final int ICON_BG_ALPHA = 0x33;
+    private static final int MSG_COLOR = 0xFFB0B0B0;
 
     // ==================== 构造 ====================
 
     public Notification(String title, boolean enabled) {
-        this(title, enabled ? "Enabled" : "Disabled", enabled, DEFAULT_DURATION);
+        this(title, enabled ? "Enabled" : "Disabled",
+                enabled ? Type.SUCCESS : Type.ERROR, DEFAULT_DURATION);
     }
 
     public Notification(String title, String message, boolean enabled, long duration) {
+        this(title, message,
+                enabled ? Type.SUCCESS : Type.ERROR, duration);
+    }
+
+    public Notification(String title, String message, Type type) {
+        this(title, message, type, DEFAULT_DURATION);
+    }
+
+    public Notification(String title, String message, Type type, long duration) {
         this.title = title;
         this.message = message;
-        this.enabled = enabled;
+        this.type = type;
         this.startTime = System.currentTimeMillis();
         this.duration = duration;
         this.animationAlpha = 0F;
@@ -71,14 +89,9 @@ public class Notification {
 
     // ==================== 更新 ====================
 
-    /**
-     * 每渲染帧调用一次（不是每 tick）。
-     * 动画基于帧率，比每 tick 更新要顺滑得多。
-     */
     public void update() {
         long elapsed = System.currentTimeMillis() - startTime;
 
-        // ---------- 透明度 ----------
         float targetAlpha;
         if (elapsed < duration) {
             if (elapsed < FADE_IN_TIME) {
@@ -93,19 +106,16 @@ public class Notification {
         }
         targetAlpha = MathHelper.clamp_float(targetAlpha, 0F, 1F);
 
-        // 缓动 —— 用 float，不用 (int) 截断
         animationAlpha += (targetAlpha - animationAlpha) * ALPHA_SPEED;
 
-        // ---------- 位置 ----------
         if (!stackInit) {
-            // 首次拿到 stackY 时，从下方 ENTRY_OFFSET 处开始
             currentY = stackY + ENTRY_OFFSET;
             stackInit = true;
         }
         currentY += (stackY - currentY) * MOVE_SPEED;
     }
 
-    // ==================== 绘制 ====================
+    // ==================== 绘制（右下角竖版，Classic 模式用） ====================
 
     public void draw() {
         if (animationAlpha < 0.02F) return;
@@ -115,33 +125,125 @@ public class Notification {
 
         float a = animationAlpha;
 
-        // 宽高
         int titleW = font.getStringWidth(title);
         int msgW = font.getStringWidth(message);
         int contentW = Math.max(titleW, msgW);
-        int boxW = contentW + PADDING_X * 2 + BAR_WIDTH;
+        int boxW = contentW + PADDING_X * 2 + ICON_SIZE + ICON_MARGIN * 2;
         int boxH = getHeight();
 
         int x = screenWidth - boxW - 4;
-        int y = Math.round(currentY);   // 只在最终落笔时取整
+        int y = Math.round(currentY);
 
-        // 背景
-        drawRect(x, y, x + boxW, y + boxH, applyAlpha(BG_COLOR, a));
+        RenderUtil.drawRoundedRect(x, y, boxW, boxH, RADIUS, applyAlpha(BG_COLOR, a));
+        RenderUtil.drawRoundedOutline(x, y, boxW, boxH, RADIUS, 1, applyAlpha(BORDER_COLOR, a));
 
-        // 左侧色条
-        int accent = enabled ? ACCENT_ON : ACCENT_OFF;
-        drawRect(x, y, x + BAR_WIDTH, y + boxH, applyAlpha(accent, a));
+        int iconX = x + ICON_MARGIN;
+        int iconY = y + (boxH - ICON_SIZE) / 2;
+        int accent = type.color;
 
-        // 文字
+        int iconBg = applyAlpha((ICON_BG_ALPHA << 24) | (accent & 0x00FFFFFF), a);
+        RenderUtil.drawRoundedRect(iconX, iconY, ICON_SIZE, ICON_SIZE, 3, iconBg);
+
+        drawIcon(type, iconX, iconY, ICON_SIZE, accent, a);
+
         int titleColor = applyAlpha(TITLE_COLOR, a);
-        int msgColor = applyAlpha(enabled ? MSG_COLOR_ON : MSG_COLOR_OFF, a);
+        int msgColor = applyAlpha(MSG_COLOR, a);
 
-        int textX = x + BAR_WIDTH + PADDING_X;
+        int textX = iconX + ICON_SIZE + ICON_MARGIN + PADDING_X - 2;
         int titleY = y + PADDING_Y;
         int msgY = titleY + font.FONT_HEIGHT + GAP;
 
         font.drawStringWithShadow(title, textX, titleY, titleColor);
         font.drawString(message, textX, msgY, msgColor);
+    }
+
+    /**
+     * ★ 横向绘制：图标 + 标题 + 消息，一行铺满 (x, y, w, h)。
+     * 供 Modern Watermark 使用。
+     * 高度推荐 22（ICON_SIZE 14 + 上下各 4 余量）。
+     */
+    public void renderInline(int x, int y, int w, int h, float globalAlpha) {
+        if (globalAlpha < 0.02F) return;
+
+        float a = globalAlpha;
+        int accent = type.color;
+
+        // 图标方块
+        int iconX = x + 4;
+        int iconY = y + (h - ICON_SIZE) / 2;
+        int iconBg = applyAlpha((ICON_BG_ALPHA << 24) | (accent & 0x00FFFFFF), a);
+        RenderUtil.drawRoundedRect(iconX, iconY, ICON_SIZE, ICON_SIZE, 3, iconBg);
+        drawIcon(type, iconX, iconY, ICON_SIZE, accent, a);
+
+        // 文字（标题 + 消息在一行，左右分布）
+        int textY = y + (h - font.FONT_HEIGHT) / 2 + 1;
+        int titleX = iconX + ICON_SIZE + 8;
+        int titleColor = applyAlpha(TITLE_COLOR, a);
+        int msgColor = applyAlpha(MSG_COLOR, a);
+
+        // 标题左对齐
+        String titleStr = title;
+        int titleW = font.getStringWidth(titleStr);
+
+        // 消息右对齐（如果空间不够就裁掉）
+        int msgMaxX = x + w - 8;   // 右侧留 8 边距
+        int msgW = font.getStringWidth(message);
+        int msgX = msgMaxX - msgW;
+
+        // 如果标题和消息重叠，裁掉消息
+        if (msgX < titleX + titleW + 6) {
+            font.drawStringWithShadow(titleStr, titleX, textY, titleColor);
+        } else {
+            font.drawStringWithShadow(titleStr, titleX, textY, titleColor);
+            font.drawStringWithShadow(message, msgX, textY, msgColor);
+        }
+    }
+
+    private static void drawIcon(Type type, int x, int y, int size, int accent, float alpha) {
+        int color = applyAlpha(accent, alpha);
+        int cx = x + size / 2;
+        int cy = y + size / 2;
+        int t = 2;
+        int r = ICON_INNER / 2;
+
+        switch (type) {
+            case SUCCESS:
+                drawThickLine(cx - r, cy, cx - 1, cy + r - 1, t, color);
+                drawThickLine(cx - 1, cy + r - 1, cx + r, cy - r + 1, t, color);
+                break;
+
+            case ERROR:
+                drawThickLine(cx - r, cy - r, cx + r, cy + r, t, color);
+                drawThickLine(cx - r, cy + r, cx + r, cy - r, t, color);
+                break;
+
+            case WARN:
+                RenderUtil.drawRect(cx - 1, cy - r, 2, r + 1, color);
+                RenderUtil.drawRect(cx - 1, cy + r - 1, 2, 2, color);
+                break;
+
+            case INFO:
+                RenderUtil.drawRect(cx - 1, cy - r, 2, 2, color);
+                RenderUtil.drawRect(cx - 1, cy - r + 3, 2, r + 1, color);
+                break;
+        }
+    }
+
+    private static void drawThickLine(int x1, int y1, int x2, int y2, int thickness, int color) {
+        int dx = Math.abs(x2 - x1);
+        int dy = Math.abs(y2 - y1);
+        int steps = Math.max(dx, dy);
+        if (steps == 0) {
+            RenderUtil.drawRect(x1, y1, thickness, thickness, color);
+            return;
+        }
+        float sx = (x2 - x1) / (float) steps;
+        float sy = (y2 - y1) / (float) steps;
+        for (int i = 0; i <= steps; i++) {
+            float px = x1 + sx * i;
+            float py = y1 + sy * i;
+            RenderUtil.drawRect(px - thickness / 2F, py - thickness / 2F, thickness, thickness, color);
+        }
     }
 
     // ==================== 对外状态 ====================
@@ -162,8 +264,20 @@ public class Notification {
         return title;
     }
 
-    public boolean isEnabled() {
-        return enabled;
+    public Type getType() {
+        return type;
+    }
+
+    // ==================== 新增 getter（供 Watermark 用） ====================
+
+    /** 当前动画透明度（0~1） */
+    public float getAnimationAlpha() {
+        return animationAlpha;
+    }
+
+    /** 消息内容 */
+    public String getMessage() {
+        return message;
     }
 
     // ==================== 工具 ====================
@@ -172,33 +286,5 @@ public class Notification {
         int alpha = argb >>> 24;
         int newAlpha = MathHelper.clamp_int((int) (alpha * factor), 0, 255);
         return (newAlpha << 24) | (argb & 0x00FFFFFF);
-    }
-
-    private static void drawRect(int left, int top, int right, int bottom, int color) {
-        if (left >= right || top >= bottom) return;
-
-        float alpha = (color >> 24 & 255) / 255.0F;
-        if (alpha <= 0F) return;
-
-        float r = (color >> 16 & 255) / 255.0F;
-        float g = (color >> 8 & 255) / 255.0F;
-        float b = (color & 255) / 255.0F;
-
-        GlStateManager.enableBlend();
-        GlStateManager.disableTexture2D();
-        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-        GlStateManager.color(r, g, b, alpha);
-
-        Tessellator tessellator = Tessellator.getInstance();
-        WorldRenderer wr = tessellator.getWorldRenderer();
-        wr.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
-        wr.pos(left, bottom, 0.0D).endVertex();
-        wr.pos(right, bottom, 0.0D).endVertex();
-        wr.pos(right, top, 0.0D).endVertex();
-        wr.pos(left, top, 0.0D).endVertex();
-        tessellator.draw();
-
-        GlStateManager.enableTexture2D();
-        GlStateManager.disableBlend();
     }
 }

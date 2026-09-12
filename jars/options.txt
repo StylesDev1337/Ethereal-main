@@ -1,6 +1,6 @@
 invertYMouse:false
 mouseSensitivity:0.34507042
-fov:1.0
+fov:0.15
 gamma:20.0
 saturation:0.0
 renderDistance:12
@@ -14,7 +14,7 @@ difficulty:2
 fancyGraphics:false
 ao:0
 renderClouds:false
-resourcePacks:["!     §d§lSakura §f§lLamb.zip"]
+resourcePacks:[]
 incompatibleResourcePacks:[]
 lastServer:
 lang:en_US

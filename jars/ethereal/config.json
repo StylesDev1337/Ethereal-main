@@ -1,7 +1,7 @@
 {
   "metadata": {
     "version": "1.0",
-    "savedTime": 1789189279149
+    "savedTime": 1789200160781
   },
   "modules": {
     "Target": {
@@ -12,13 +12,13 @@
         "Animals": true,
         "Mobs": true,
         "Bosses": true,
-        "ThroughWalls": false,
+        "ThroughWalls": true,
         "Silverfish": true,
         "Players": true
       },
       "numberValues": {
         "FOV": 360.0,
-        "SwitchDelay": 150.0
+        "SwitchDelay": 0.0
       },
       "modeValues": {
         "Sort": "Distance",
@@ -31,7 +31,7 @@
       "keyBind": 19,
       "booleanValues": {
         "RequirePress": false,
-        "ThroughWalls": false
+        "ThroughWalls": true
       },
       "numberValues": {
         "MaxCPS": 20.0,
@@ -46,19 +46,8 @@
       },
       "stringValues": {}
     },
-    "TargetHud": {
-      "enabled": true,
-      "keyBind": 45,
-      "booleanValues": {},
-      "numberValues": {
-        "PosX": 659.0,
-        "PosY": 266.0
-      },
-      "modeValues": {},
-      "stringValues": {}
-    },
     "ThrowableAura": {
-      "enabled": false,
+      "enabled": true,
       "keyBind": 44,
       "booleanValues": {
         "AutoSwitch": true,
@@ -79,7 +68,7 @@
       "numberValues": {},
       "modeValues": {
         "Mode": "OldPushdown",
-        "SwingSpeed": "10"
+        "SwingSpeed": "5"
       },
       "stringValues": {}
     },
@@ -87,13 +76,30 @@
       "enabled": true,
       "keyBind": 0,
       "booleanValues": {
-        "Draw Parentheses": true,
-        "Draw WaterMark": true,
-        "Draw Username": true
+        "TargetHud": true,
+        "ArrayList-Background": true,
+        "Username": true,
+        "Scoreboard": true,
+        "Watermark-Parentheses": true,
+        "ArrayList": true,
+        "Watermark-FPS": true,
+        "Watermark": true
       },
-      "numberValues": {},
+      "numberValues": {
+        "ArrayList-Y": -1.0,
+        "ArrayList-X": -1.0,
+        "TargetHud-X": -1.0,
+        "Scoreboard-X": -1.0,
+        "Watermark-X": -1.0,
+        "TargetHud-Y": -1.0,
+        "Watermark-Y": -1.0,
+        "Scoreboard-Y": -1.0,
+        "Username-X": -1.0,
+        "Username-Y": -1.0
+      },
       "modeValues": {
-        "Themes": "Grey"
+        "Theme": "Blue",
+        "Watermark-Mode": "Modern"
       },
       "stringValues": {}
     },
@@ -125,6 +131,8 @@
       "booleanValues": {
         "AutoSwitchFromInv": true,
         "Silent": true,
+        "AutoJump": true,
+        "Tower": true,
         "DisableConflicts": true,
         "Debug": false
       },
@@ -164,7 +172,7 @@
         "SmoothRotations": false
       },
       "numberValues": {
-        "SmoothFactor": 0.15
+        "SmoothFactor": 0.1
       },
       "modeValues": {},
       "stringValues": {}

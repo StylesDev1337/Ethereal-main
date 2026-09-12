@@ -1,6 +1,7 @@
 package cn.ethereal.ui.controls;
 
 import cn.ethereal.ui.values.StringValue;
+import cn.ethereal.util.render.RenderUtil;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -63,37 +64,28 @@ public class InputField extends Control {
     public void draw(int mouseX, int mouseY, float partialTicks) {
         if (!visible) return;
 
-        // ★ 修复：正确处理键盘事件
         if (focused && editable) {
             handleKeyboardInput();
         }
 
-        // 更新光标闪烁
         long currentTime = System.currentTimeMillis();
         if (currentTime - cursorBlinkTime > 500) {
             cursorBlinkTime = currentTime;
             cursorVisible = !cursorVisible;
         }
 
-        // 绘制背景
-        drawRect(x, y, x + width, y + height, backgroundColor);
+        // ★ 圆角背景
+        RenderUtil.drawRoundedRect(x, y, width, height, 3, 0xFF1A1A1A);
+        // ★ 圆角边框
+        int border = focused ? 0xFF4A9EFF : 0xFF2A2A2A;
+        RenderUtil.drawRoundedOutline(x, y, width, height, 3, 1, border);
 
-        // 绘制边框
-        int border = focused ? borderColorFocused : borderColor;
-        drawRect(x, y, x + width, y + 1, border);
-        drawRect(x, y + height - 1, x + width, y + height, border);
-        drawRect(x, y, x + 1, y + height, border);
-        drawRect(x + width - 1, y, x + width, y + height, border);
-
-        // 绘制选择高亮（在文本下方）
         if (hasSelection()) {
             drawSelection();
         }
 
-        // 绘制文本
         drawText();
 
-        // 绘制光标（在文本上方）
         if (focused && editable && cursorVisible) {
             drawCursor();
         }

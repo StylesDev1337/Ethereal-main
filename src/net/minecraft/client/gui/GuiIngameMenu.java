@@ -98,9 +98,7 @@ public class GuiIngameMenu extends GuiScreen
                 break;
 
             case 11451:
-                MicrosoftLoginManager.startLogin();
-                this.mc.displayGuiScreen((GuiScreen) null);
-                this.mc.setIngameFocus();
+                this.mc.displayGuiScreen(new cn.ethereal.ui.GuiMicrosoftLogin(this));
                 break;
 
             case 7:

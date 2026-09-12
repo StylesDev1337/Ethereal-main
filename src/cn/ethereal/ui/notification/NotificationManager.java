@@ -6,6 +6,8 @@ import cn.ethereal.event.events.Render2DEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -29,9 +31,11 @@ public class NotificationManager {
         return instance;
     }
 
+    // ==================== 旧 API（兼容） ====================
+
     public void notify(String title, boolean enabled) {
         Notification notification = new Notification(title, enabled);
-        notifications.add(0, notification);   // index 0 = 最新 = 最靠近屏幕底部
+        notifications.add(0, notification);
         trimOverflow();
     }
 
@@ -41,45 +45,107 @@ public class NotificationManager {
         trimOverflow();
     }
 
+    // ==================== 新 API ====================
+
+    public void notify(String title, String message, Notification.Type type) {
+        notifications.add(0, new Notification(title, message, type));
+        trimOverflow();
+    }
+
+    public void notify(String title, String message, Notification.Type type, long duration) {
+        notifications.add(0, new Notification(title, message, type, duration));
+        trimOverflow();
+    }
+
     private void trimOverflow() {
         while (notifications.size() > MAX_VISIBLE) {
             notifications.remove(notifications.size() - 1);
         }
     }
 
-    // ==================== 渲染 ====================
+    // ==================== 渲染（Classic 右下角） ====================
 
     @EventListener
     public void onRender2D(Render2DEvent event) {
+        // ★ Modern Watermark 接管时，右下角这一套跳过
+        if (isModernWatermarkActive()) return;
+
         if (notifications.isEmpty()) return;
 
-        // 1. 重算每条通知的目标堆叠位置
         updateStackPositions();
 
-        // 2. 更新动画 + 绘制
         for (Notification n : notifications) {
             n.update();
             n.draw();
         }
 
-        // 3. 清理过期（放在最后，避免清理时影响本帧的 updateStackPositions）
         notifications.removeIf(Notification::isExpired);
     }
 
-    /**
-     * 从下往上依次排列：index 0 最靠底，往上的 index 依次上移。
-     */
     private void updateStackPositions() {
         ScaledResolution sr = new ScaledResolution(mc);
         int screenHeight = sr.getScaledHeight();
 
-        int cursor = screenHeight - BOTTOM_MARGIN;   // 底边 y
+        int cursor = screenHeight - BOTTOM_MARGIN;
 
         for (Notification n : notifications) {
             int h = n.getHeight();
             int targetY = cursor - h;
             n.setStackY(targetY);
             cursor = targetY - Notification.LINE_SPACING;
+        }
+    }
+
+    // ==================== 供 Modern Watermark 使用 ====================
+
+    /**
+     * 返回当前活跃（未过期且还在显示）的通知，最新在前，最多 limit 条。
+     * 只返回 animationAlpha 还有意义的。
+     */
+    public List<Notification> getActiveNotifications(int limit) {
+        List<Notification> result = new ArrayList<>();
+        long now = System.currentTimeMillis();
+        for (Notification n : notifications) {
+            if (result.size() >= limit) break;
+            result.add(n);
+        }
+        return result;
+    }
+
+    /**
+     * 是否还有未过期的通知。
+     */
+    public boolean hasActiveNotifications() {
+        if (notifications.isEmpty()) return false;
+        for (Notification n : notifications) {
+            if (!n.isExpired()) return true;
+        }
+        return false;
+    }
+
+    /** 清理过期（Watermark 渲染循环也要调一次，避免 Classic 模式不渲染时列表不清理） */
+    public void purgeExpired() {
+        notifications.removeIf(Notification::isExpired);
+    }
+
+    /** 每帧 tick 所有通知（Watermark 模式下调） */
+    public void tickAll() {
+        for (Notification n : notifications) {
+            n.update();
+        }
+    }
+
+    /** 判断 Modern Watermark 是否在接管通知渲染 */
+    private boolean isModernWatermarkActive() {
+        try {
+            cn.ethereal.hud.HudManager hm = cn.ethereal.hud.HudManager.getInstance();
+            if (hm == null) return false;
+            cn.ethereal.module.render.HUD hud = cn.ethereal.module.render.HUD.getInstance();
+            if (hud == null || !hud.isEnabled()) return false;
+            if (!hud.watermarkShow.getValue()) return false;
+            return "Modern".equals(hud.watermarkMode.getValue());
+        } catch (Throwable t) {
+            return false;
         }
     }
 }

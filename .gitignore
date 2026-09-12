@@ -1,30 +1,17 @@
-### IntelliJ IDEA ###
+# IntelliJ
+.idea/
+*.iml
+*.iws
 out/
-!**/src/main/**/out/
-!**/src/test/**/out/
-.kotlin
 
-### Eclipse ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
+# 项目输出
+build/
+/bin/
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
+# 用户配置（每个用户不同）
+ethereal/config.json
+*.log
 
-### VS Code ###
-.vscode/
-
-### Mac OS ###
+# 系统
 .DS_Store
+Thumbs.db

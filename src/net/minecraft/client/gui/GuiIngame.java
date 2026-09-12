@@ -537,8 +537,33 @@ public class GuiIngame extends Gui
         this.streamIndicator.render(p_180478_1_.getScaledWidth() - 10, 10);
     }
 
+    /**
+     * Ethereal: 判断自定义计分板元素是否处于"可见"状态。
+     * 只有元素 enabled 且自定义计分板有内容要画时才屏蔽原版。
+     */
+    private boolean isEtherealScoreboardVisible() {
+        try {
+            cn.ethereal.hud.HudManager hm = cn.ethereal.hud.HudManager.getInstance();
+            if (hm == null) return false;
+            for (cn.ethereal.hud.HudElement e : hm.getElements()) {
+                if ("Scoreboard".equals(e.name)) {
+                    return e.isEnabled() && e.getWidth() > 0 && e.getHeight() > 0;
+                }
+            }
+        } catch (Throwable t) {
+            // 防御：如果 Ethereal 还没初始化，不屏蔽原版
+        }
+        return false;
+    }
+
     private void renderScoreboard(ScoreObjective p_180475_1_, ScaledResolution p_180475_2_)
     {
+        if (cn.ethereal.module.render.HUD.getInstance() != null
+                && cn.ethereal.module.render.HUD.getInstance().isEnabled()
+                && isEtherealScoreboardVisible()) {
+            return;
+        }
+
         Scoreboard scoreboard = p_180475_1_.getScoreboard();
         Collection<Score> collection = scoreboard.getSortedScores(p_180475_1_);
         List<Score> list = Lists.newArrayList(Iterables.filter(collection, new Predicate<Score>()

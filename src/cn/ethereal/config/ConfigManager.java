@@ -39,9 +39,6 @@ public class ConfigManager {
         return instance;
     }
 
-    /**
-     * 保存所有模块配置（包括启用状态、按键绑定、所有参数值）
-     */
     public void saveConfig() {
         try {
             if (!configFile.getParentFile().exists()) {
@@ -56,21 +53,15 @@ public class ConfigManager {
                         module.getKey()
                 );
 
-                // ---------- 保存布尔值 ----------
                 for (BooleanValue value : module.getBooleanValues()) {
                     moduleConfig.booleanValues.put(value.getName(), value.getValue());
                 }
-
-                // ---------- 保存数值 ----------
                 for (NumberValue value : module.getNumberValues()) {
                     moduleConfig.numberValues.put(value.getName(), value.getValue());
                 }
-
-                // ---------- 保存模式值 ----------
                 for (ModeValue value : module.getModeValues()) {
                     moduleConfig.modeValues.put(value.getName(), value.getValue());
                 }
-
                 for (StringValue value : module.getStringValues()) {
                     moduleConfig.stringValues.put(value.getName(), value.getValue());
                 }
@@ -92,9 +83,6 @@ public class ConfigManager {
         }
     }
 
-    /**
-     * 加载所有模块配置（包括启用状态、按键绑定、所有参数值）
-     */
     public void loadConfig() {
         try {
             if (!configFile.exists()) {
@@ -119,40 +107,24 @@ public class ConfigManager {
 
                 ModuleConfig moduleConfig = entry.getValue();
 
-                // 恢复基本状态
                 module.setEnabled(moduleConfig.enabled);
                 module.setKey(moduleConfig.keyBind);
 
-                // ---------- 恢复布尔值 ----------
                 for (BooleanValue value : module.getBooleanValues()) {
                     Boolean saved = moduleConfig.booleanValues.get(value.getName());
-                    if (saved != null) {
-                        value.setValue(saved);
-                    }
+                    if (saved != null) value.setValue(saved);
                 }
-
-                // ---------- 恢复数值 ----------
                 for (NumberValue value : module.getNumberValues()) {
                     Double saved = moduleConfig.numberValues.get(value.getName());
-                    if (saved != null) {
-                        // NumberValue.setValue() 会自动进行范围检查和增量取整
-                        value.setValue(saved);
-                    }
+                    if (saved != null) value.setValue(saved);
                 }
-
-                // ---------- 恢复模式值 ----------
                 for (ModeValue value : module.getModeValues()) {
                     String saved = moduleConfig.modeValues.get(value.getName());
-                    if (saved != null) {
-                        value.setValue(saved);
-                    }
+                    if (saved != null) value.setValue(saved);
                 }
-
                 for (StringValue value : module.getStringValues()) {
                     String saved = moduleConfig.stringValues.get(value.getName());
-                    if (saved != null) {
-                        value.setValue(saved);
-                    }
+                    if (saved != null) value.setValue(saved);
                 }
 
                 loadedCount++;
@@ -169,9 +141,6 @@ public class ConfigManager {
         }
     }
 
-    /**
-     * 重置配置（删除文件并重置所有模块到默认状态）
-     */
     public void resetConfig() {
         try {
             if (configFile.exists()) {
@@ -179,14 +148,13 @@ public class ConfigManager {
                 System.out.println("[Ethereal] Config file deleted");
             }
 
-            // 重置所有模块到默认状态
             for (Module module : ModuleManager.getInstance().getModules()) {
                 module.setEnabled(false);
                 module.setKey(0);
-                // 重置所有参数到默认值
                 for (BooleanValue v : module.getBooleanValues()) v.reset();
                 for (NumberValue v : module.getNumberValues()) v.reset();
                 for (ModeValue v : module.getModeValues()) v.reset();
+                for (StringValue v : module.getStringValues()) v.reset();
             }
 
             saveConfig();
@@ -201,8 +169,6 @@ public class ConfigManager {
         return configFile;
     }
 
-    // ---------- 内部数据结构 ----------
-
     private static class ConfigData {
         Metadata metadata = new Metadata();
         Map<String, ModuleConfig> modules = new HashMap<>();
@@ -216,13 +182,11 @@ public class ConfigManager {
     private static class ModuleConfig {
         boolean enabled;
         int keyBind;
-        // ★ 新增三个 Map 保存参数值
         Map<String, Boolean> booleanValues = new HashMap<>();
         Map<String, Double> numberValues = new HashMap<>();
         Map<String, String> modeValues = new HashMap<>();
         Map<String, String> stringValues = new HashMap<>();
 
-        // 无参构造（Gson 需要）
         ModuleConfig() {}
 
         ModuleConfig(boolean enabled, int keyBind) {

@@ -30,6 +30,7 @@ public class KillAura extends Module {
     private EntityLivingBase target = null;
     private int attackCooldownTicks = 0;
     private boolean blocking = false;
+    private boolean attacking;
 
     // ==================== 属性 ====================
     private final ModeValue autoBlockMode;
@@ -69,13 +70,16 @@ public class KillAura extends Module {
         target = null;
         attackCooldownTicks = 0;
         blocking = false;
+        attacking = false;
     }
 
     @Override
     public void onDisable() {
         super.onDisable();
         stopBlocking();
+        attacking = false;
         target = null;
+        Rotations.clearTarget();
     }
 
     // ==================== 主逻辑 ====================
@@ -86,6 +90,8 @@ public class KillAura extends Module {
         if (!NullPointHelper.isPlayerInWorld()) return;
         if (event.getPhase() != UpdateEvent.Phase.PRE) return;
 
+        attacking = false;
+
         if (attackCooldownTicks > 0) attackCooldownTicks--;
 
         // 从 Target 模块取目标
@@ -93,12 +99,14 @@ public class KillAura extends Module {
 
         if (target == null) {
             stopBlocking();
+            Rotations.clearTarget();
             return;
         }
 
         // 超出自己的 swingRange → 交给投掷物光环处理
         if (Target.distanceTo(target) > swingRange.getValue()) {
             stopBlocking();
+            Rotations.clearTarget();
             return;
         }
 
@@ -122,7 +130,10 @@ public class KillAura extends Module {
     // ==================== 旋转 ====================
 
     private void handleRotations() {
-        if (target == null) return;
+        if (target == null) {
+            Rotations.clearTarget();
+            return;
+        }
         String mode = rotationMode.getValue();
         if (mode.equals("None")) return;
 
@@ -139,7 +150,10 @@ public class KillAura extends Module {
     // ==================== 攻击 ====================
 
     private void tryAttack() {
-        if (target == null) return;
+        if (target == null) {
+            Rotations.clearTarget();
+            return;
+        }
 
         if (Target.distanceTo(target) > attackRange.getValue()) {
             stopBlocking();
@@ -207,6 +221,8 @@ public class KillAura extends Module {
         mc.thePlayer.swingItem();
         mc.playerController.attackEntity(mc.thePlayer, target);
 
+        attacking = true;
+
         int cps = randomInt(minCPS.getValue().intValue(), maxCPS.getValue().intValue());
         attackCooldownTicks = Math.max(1, 20 / cps);
     }
@@ -262,5 +278,9 @@ public class KillAura extends Module {
 
     public float getSwingRange() {
         return swingRange.getValue().floatValue();
+    }
+
+    public boolean isAttacking() {
+        return attacking;
     }
 }

@@ -8,10 +8,7 @@ import cn.ethereal.module.movement.Scaffold;
 import cn.ethereal.module.movement.Sprint;
 //import cn.ethereal.module.player.ThrowableAura;
 import cn.ethereal.module.player.ThrowableAura;
-import cn.ethereal.module.render.Animations;
-import cn.ethereal.module.render.HUD;
-import cn.ethereal.module.render.FullBright;
-import cn.ethereal.module.render.TargetHud;
+import cn.ethereal.module.render.*;
 import cn.ethereal.ui.ClickGUI;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.input.Keyboard;
@@ -42,7 +39,6 @@ public class ModuleManager {
         addModule(new Noslow());
         addModule(new ThrowableAura());
         addModule(new Rotations());
-        addModule(new TargetHud());
         addModule(new Scaffold());
         addModule(new Animations());
     }

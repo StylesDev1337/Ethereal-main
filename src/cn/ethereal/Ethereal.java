@@ -3,6 +3,8 @@ package cn.ethereal;
 import cn.ethereal.command.CommandManager;
 import cn.ethereal.config.AutoSaveManager;
 import cn.ethereal.config.ConfigManager;
+import cn.ethereal.hud.HudManager;
+import cn.ethereal.hud.impl.*;
 import cn.ethereal.module.ModuleManager;
 import cn.ethereal.ui.notification.NotificationManager;
 import org.lwjgl.opengl.Display;
@@ -23,6 +25,13 @@ public class Ethereal {
 
         ConfigManager configManager = ConfigManager.getInstance();
         configManager.loadConfig();
+
+        HudManager hudManager = HudManager.getInstance();
+        hudManager.register(new ArrayListHud());
+        hudManager.register(new WatermarkHud());
+        hudManager.register(new UsernameHud());
+        hudManager.register(new ScoreboardHud());
+        hudManager.register(new TargetHud());
 
         AutoSaveManager.getInstance();
 

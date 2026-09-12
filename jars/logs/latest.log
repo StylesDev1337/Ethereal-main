@@ -1,43 +1,130 @@
-[12:58:01] [Client thread/INFO]: Setting user: Player564
-[12:58:01] [Client thread/INFO]: (Session ID is token:0:Player564)
-[12:58:03] [Client thread/INFO]: LWJGL Version: 2.9.4
-[12:58:04] [Client thread/INFO]: Reloading ResourceManager: Default, !     §d§lSakura §f§lLamb.zip
-[12:58:05] [Sound Library Loader/INFO]: Starting up SoundSystem...
-[12:58:05] [Thread-6/INFO]: Initializing LWJGL OpenAL
-[12:58:05] [Thread-6/INFO]: (The LWJGL binding of OpenAL.  For more information, see http://www.lwjgl.org)
-[12:58:06] [Thread-6/INFO]: OpenAL initialized.
-[12:58:06] [Sound Library Loader/INFO]: Sound engine started
-[12:58:08] [Client thread/WARN]: Texture minecraft:textures/items/fireball.png with size 24x24 limits mip level from 4 to 3
-[12:58:10] [Client thread/WARN]: textures: dropping miplevel from 4 to 3, because of minimum power of two: 8
-[12:58:11] [Client thread/INFO]: Created: 4096x2048 textures-atlas
-[12:58:25] [Server thread/INFO]: Starting integrated minecraft server version 1.8.8
-[12:58:25] [Server thread/INFO]: Generating keypair
-[12:58:26] [Server thread/INFO]: Preparing start region for level 0
-[12:58:27] [Server thread/INFO]: Changing view distance to 12, from 10
-[12:58:27] [Server thread/INFO]: Player564[local:E:74ac58b6] logged in with entity id 83 at (546.926344620364, 73.0, 379.8209960407196)
-[12:58:27] [Server thread/INFO]: Player564 joined the game
-[12:58:29] [Server thread/INFO]: Saving and pausing game...
-[12:58:29] [Server thread/INFO]: Saving chunks for level 'mcpworld'/Overworld
-[12:58:29] [Server thread/INFO]: Saving chunks for level 'mcpworld'/Nether
-[12:58:29] [Server thread/INFO]: Saving chunks for level 'mcpworld'/The End
-[12:59:54] [Server thread/INFO]: Saving and pausing game...
-[12:59:54] [Server thread/INFO]: Saving chunks for level 'mcpworld'/Overworld
-[12:59:54] [Server thread/INFO]: Saving chunks for level 'mcpworld'/Nether
-[12:59:54] [Server thread/INFO]: Saving chunks for level 'mcpworld'/The End
-[13:01:01] [Server thread/INFO]: Saving and pausing game...
-[13:01:01] [Server thread/INFO]: Saving chunks for level 'mcpworld'/Overworld
-[13:01:01] [Server thread/INFO]: Saving chunks for level 'mcpworld'/Nether
-[13:01:01] [Server thread/INFO]: Saving chunks for level 'mcpworld'/The End
-[13:01:15] [Server thread/INFO]: Saving and pausing game...
-[13:01:15] [Server thread/INFO]: Saving chunks for level 'mcpworld'/Overworld
-[13:01:15] [Server thread/INFO]: Saving chunks for level 'mcpworld'/Nether
-[13:01:15] [Server thread/INFO]: Saving chunks for level 'mcpworld'/The End
-[13:01:16] [Server thread/INFO]: Stopping server
-[13:01:16] [Server thread/INFO]: Saving players
-[13:01:16] [Server thread/INFO]: Saving worlds
-[13:01:16] [Server thread/INFO]: Saving chunks for level 'mcpworld'/Overworld
-[13:01:16] [Server thread/INFO]: Saving chunks for level 'mcpworld'/Nether
-[13:01:16] [Server thread/INFO]: Saving chunks for level 'mcpworld'/The End
-[13:01:19] [Client thread/INFO]: Stopping!
-[13:01:19] [Client thread/INFO]: SoundSystem shutting down...
-[13:01:19] [Client thread/WARN]: Author: Paul Lamb, www.paulscode.com
+[15:56:43] [Client thread/INFO]: Setting user: Player966
+[15:56:43] [Client thread/INFO]: (Session ID is token:0:Player966)
+[15:56:44] [Client thread/INFO]: LWJGL Version: 2.9.4
+[15:56:45] [Client thread/INFO]: Reloading ResourceManager: Default, §l§6PVP §l§cSound Resource Kit.zip, !        §eRicefault §8[§f32x§8].zip
+[15:56:46] [Sound Library Loader/INFO]: Starting up SoundSystem...
+[15:56:46] [Thread-6/INFO]: Initializing LWJGL OpenAL
+[15:56:46] [Thread-6/INFO]: (The LWJGL binding of OpenAL.  For more information, see http://www.lwjgl.org)
+[15:56:46] [Thread-6/INFO]: OpenAL initialized.
+[15:56:46] [Sound Library Loader/INFO]: Sound engine started
+[15:56:48] [Client thread/INFO]: Created: 1024x1024 textures-atlas
+[15:56:52] [Server thread/INFO]: Starting integrated minecraft server version 1.8.8
+[15:56:52] [Server thread/INFO]: Generating keypair
+[15:56:52] [Server thread/INFO]: Preparing start region for level 0
+[15:56:53] [Server thread/INFO]: Changing view distance to 12, from 10
+[15:56:53] [Server thread/INFO]: Player966[local:E:0799b79e] logged in with entity id 80 at (489.6295975649907, 79.4047088316878, 375.97196005673686)
+[15:56:53] [Server thread/INFO]: Player966 joined the game
+[15:56:54] [Server thread/INFO]: Player966 has just earned the achievement [Taking Inventory]
+[15:56:55] [Client thread/INFO]: [CHAT] Player966 has just earned the achievement [Taking Inventory]
+[15:58:07] [Server thread/INFO]: Saving and pausing game...
+[15:58:07] [Server thread/INFO]: Saving chunks for level 'mcpworld'/Overworld
+[15:58:07] [Server thread/INFO]: Saving chunks for level 'mcpworld'/Nether
+[15:58:07] [Server thread/INFO]: Saving chunks for level 'mcpworld'/The End
+[15:58:28] [Server thread/INFO]: Saving and pausing game...
+[15:58:28] [Server thread/INFO]: Saving chunks for level 'mcpworld'/Overworld
+[15:58:28] [Server thread/INFO]: Saving chunks for level 'mcpworld'/Nether
+[15:58:28] [Server thread/INFO]: Saving chunks for level 'mcpworld'/The End
+[15:58:39] [Server thread/INFO]: Saving and pausing game...
+[15:58:39] [Server thread/INFO]: Saving chunks for level 'mcpworld'/Overworld
+[15:58:40] [Server thread/INFO]: Saving chunks for level 'mcpworld'/Nether
+[15:58:40] [Server thread/INFO]: Saving chunks for level 'mcpworld'/The End
+[15:58:52] [Server thread/INFO]: Saving and pausing game...
+[15:58:52] [Server thread/INFO]: Saving chunks for level 'mcpworld'/Overworld
+[15:58:52] [Server thread/INFO]: Saving chunks for level 'mcpworld'/Nether
+[15:58:52] [Server thread/INFO]: Saving chunks for level 'mcpworld'/The End
+[15:58:53] [Server thread/INFO]: Stopping server
+[15:58:53] [Server thread/INFO]: Saving players
+[15:58:53] [Server thread/INFO]: Saving worlds
+[15:58:53] [Server thread/INFO]: Saving chunks for level 'mcpworld'/Overworld
+[15:58:53] [Server thread/INFO]: Saving chunks for level 'mcpworld'/Nether
+[15:58:53] [Server thread/INFO]: Saving chunks for level 'mcpworld'/The End
+[15:58:56] [Client thread/INFO]: Connecting to mc.loyisa.cn, 25565
+[15:58:58] [Client thread/INFO]: [CHAT]        
+[15:58:58] [Client thread/INFO]: [CHAT] 你现在正在 legacy(1.8.8) 服务器上!
+[15:58:58] [Client thread/INFO]: [CHAT] 要想回到 latest 服务器，请输入 /server latest!
+[15:58:58] [Client thread/INFO]: [CHAT] [+] Probably_
+[15:58:58] [Client thread/INFO]: [CHAT] Diona >> 你的客户端标识为: vanilla
+[15:59:00] [Client thread/INFO]: [CHAT] [-] Sevecreator1314
+[15:59:00] [Client thread/INFO]: [CHAT] [+] Sevecreator1314
+[15:59:06] [Client thread/INFO]: [CHAT] Diona >> 你可以使用 /i 指令来获取物品!
+[15:59:12] [Client thread/INFO]: [CHAT] [-] xiaochengzi66
+[15:59:38] [Client thread/INFO]: [CHAT] [+] QiLava
+[15:59:53] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[15:59:53] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[15:59:54] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[15:59:55] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[15:59:55] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[15:59:55] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[15:59:55] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[15:59:55] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[15:59:55] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[15:59:55] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[15:59:55] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[15:59:55] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[15:59:55] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[15:59:55] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[15:59:56] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[15:59:56] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[15:59:56] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[15:59:56] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[15:59:56] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[15:59:56] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[15:59:56] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[15:59:56] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[16:00:04] [Client thread/INFO]: [CHAT] Tzi_KFcLs_08_18: E
+[16:00:05] [Client thread/INFO]: [CHAT] [+] Minecraft293
+[16:00:10] [Client thread/INFO]: [CHAT] Diona >> 你可以使用 /i 指令来获取物品!
+[16:00:36] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[16:00:36] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[16:00:36] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[16:00:36] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[16:00:36] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[16:00:42] [Client thread/INFO]: [CHAT] Diona >> 所有的搭路区域将在 60 秒后被清除!
+[16:00:56] [Client thread/INFO]: [CHAT] [-] Minecraft293
+[16:01:04] [Client thread/INFO]: Reloading ResourceManager: Default
+[16:01:05] [Client thread/INFO]: SoundSystem shutting down...
+[16:01:05] [Client thread/WARN]: Author: Paul Lamb, www.paulscode.com
+[16:01:05] [Sound Library Loader/INFO]: Starting up SoundSystem...
+[16:01:06] [Thread-12/INFO]: Initializing LWJGL OpenAL
+[16:01:06] [Thread-12/INFO]: (The LWJGL binding of OpenAL.  For more information, see http://www.lwjgl.org)
+[16:01:06] [Thread-12/INFO]: OpenAL initialized.
+[16:01:06] [Sound Library Loader/INFO]: Sound engine started
+[16:01:07] [Client thread/INFO]: Created: 512x512 textures-atlas
+[16:01:12] [Client thread/INFO]: [CHAT] [-] OAQ_Z
+[16:01:12] [Client thread/INFO]: [CHAT] Diona >> 所有的搭路区域将在 30 秒后被清除!
+[16:01:14] [Client thread/INFO]: [CHAT] Diona >> 欢迎加入测试服的官方Q群: 741394677 | https://qm.qq.com/q/UO8d9hMEgi
+[16:01:15] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[16:01:15] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[16:01:15] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[16:01:15] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[16:01:15] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[16:01:15] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[16:01:16] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[16:01:16] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[16:01:16] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[16:01:17] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[16:01:17] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[16:01:17] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[16:01:17] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[16:01:17] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[16:01:17] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[16:01:17] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[16:01:17] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[16:01:17] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[16:01:17] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[16:01:18] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:damage.thorns
+[16:01:32] [Client thread/INFO]: [CHAT] Diona >> 地面上的所有物品将在 60 秒后被清除!
+[16:01:38] [Client thread/INFO]: [CHAT] Diona >> 传送完成!
+[16:01:53] [Client thread/INFO]: [CHAT] [+] Hupar0n
+[16:02:02] [Client thread/INFO]: [CHAT] Diona >> 地面上的所有物品将在 30 秒后被清除!
+[16:02:18] [Client thread/INFO]: [CHAT] Diona >> 欢迎加入测试服的官方Q群: 741394677 | https://qm.qq.com/q/UO8d9hMEgi
+[16:02:26] [Client thread/INFO]: [CHAT] [+] Ryzuki1
+[16:02:27] [Client thread/INFO]: [CHAT] Diona >> 地面上的所有物品将在 5 秒后被清除!
+[16:02:30] [Client thread/INFO]: [CHAT] [-] Sevecreator1314
+[16:02:31] [Client thread/INFO]: [CHAT] [-] Ryzuki1
+[16:02:31] [Client thread/INFO]: [CHAT] [+] Ryzuki1
+[16:02:32] [Client thread/INFO]: [CHAT] [-] Ryzuki1
+[16:02:32] [Client thread/INFO]: [CHAT] Diona >> 19 个物品已被清除!
+[16:02:40] [Client thread/INFO]: Stopping!
+[16:02:40] [Client thread/INFO]: SoundSystem shutting down...
+[16:02:40] [Client thread/WARN]: Author: Paul Lamb, www.paulscode.com

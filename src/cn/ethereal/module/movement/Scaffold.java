@@ -10,6 +10,7 @@ import cn.ethereal.module.player.ThrowableAura;
 import cn.ethereal.ui.values.BooleanValue;
 import cn.ethereal.ui.values.NumberValue;
 import cn.ethereal.util.helper.NullPointHelper;
+import cn.ethereal.util.render.RenderUtil;
 import cn.ethereal.util.rotation.RotationUtil;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.ScaledResolution;
@@ -35,12 +36,16 @@ public class Scaffold extends Module {
 
     public static Scaffold INSTANCE;
 
+    // ==================== 属性 ====================
     private final BooleanValue debug;
     private final BooleanValue silent;
     private final BooleanValue autoSwitchFromInv;
-    private final BooleanValue disableConflicts;   // ★ 新增开关
+    private final BooleanValue disableConflicts;
+    private final BooleanValue autoJump;       // ★ 自动跑跳搭
+    private final BooleanValue tower;          // ★ 真按空格时往上搭
     private final NumberValue delay;
 
+    // ==================== 状态 ====================
     private int prevSlot = -1;
     private int placeTimer = 0;
     private int baseY = -1;
@@ -48,10 +53,11 @@ public class Scaffold extends Module {
     private final Map<BlockPos, Integer> recentlyPlaced = new HashMap<>();
     private final Random random = new Random();
 
-    // ★ 记录开启 Scaffold 之前哪些模块是开着的
+    // 开启 Scaffold 之前的冲突模块状态
     private boolean wasKillAuraEnabled = false;
     private boolean wasThrowableAuraEnabled = false;
 
+    // ==================== 黑名单 ====================
     private static final List<Block> INVALID_BLOCKS = Arrays.asList(
             Blocks.enchanting_table, Blocks.chest, Blocks.end_portal_frame,
             Blocks.trapped_chest, Blocks.anvil, Blocks.sand, Blocks.web,
@@ -61,6 +67,8 @@ public class Scaffold extends Module {
             Blocks.wall_banner, Blocks.redstone_torch
     );
 
+    // ==================== 构造 ====================
+
     public Scaffold() {
         super("Scaffold", Keyboard.KEY_NONE, Category.MOVEMENT, false, true);
         INSTANCE = this;
@@ -68,6 +76,8 @@ public class Scaffold extends Module {
         silent            = addBooleanValue("Silent", false);
         autoSwitchFromInv = addBooleanValue("AutoSwitchFromInv", true);
         disableConflicts  = addBooleanValue("DisableConflicts", true);
+        autoJump          = addBooleanValue("AutoJump", true);
+        tower             = addBooleanValue("Tower", true);
         delay             = addNumberValue("Delay", 0.0, 0.0, 5.0, 1.0);
     }
 
@@ -82,7 +92,6 @@ public class Scaffold extends Module {
         currentTick = 0;
         recentlyPlaced.clear();
 
-        // ★ 关闭冲突模块并记录状态
         wasKillAuraEnabled = false;
         wasThrowableAuraEnabled = false;
 
@@ -108,7 +117,6 @@ public class Scaffold extends Module {
         prevSlot = -1;
         recentlyPlaced.clear();
 
-        // ★ 恢复之前关闭的模块
         if (wasKillAuraEnabled && KillAura.INSTANCE != null) {
             KillAura.INSTANCE.setEnabled(true);
             wasKillAuraEnabled = false;
@@ -129,12 +137,26 @@ public class Scaffold extends Module {
 
         currentTick++;
 
-        // baseY 缓存：只在落地时更新
-        if (mc.thePlayer.onGround) {
+        // ★ 判断玩家是否真的按着空格（物理键盘，不是模拟）
+        boolean realJumpPressed = Keyboard.isKeyDown(
+                mc.gameSettings.keyBindJump.getKeyCode());
+
+        if (tower.getValue() && realJumpPressed) {
+            // ---------- Tower 模式：往上搭 ----------
             baseY = (int) Math.floor(mc.thePlayer.posY) - 1;
-        }
-        if (baseY == -1) {
-            baseY = (int) Math.floor(mc.thePlayer.posY) - 1;
+            if (mc.thePlayer.onGround) {
+                mc.thePlayer.motionY = 0.42F;
+            }
+        } else {
+            // ---------- 普通 / 自动跑跳搭 ----------
+            if (mc.thePlayer.onGround || baseY == -1) {
+                baseY = (int) Math.floor(mc.thePlayer.posY) - 1;
+            }
+
+            // ★ 自动模拟跳跃
+            if (autoJump.getValue() && mc.thePlayer.onGround && isMoving()) {
+                mc.thePlayer.jump();
+            }
         }
 
         if (placeTimer > 0) {
@@ -148,7 +170,10 @@ public class Scaffold extends Module {
                 (int) Math.floor(mc.thePlayer.posZ)
         );
 
-        if (!isReplaceable(below)) return;
+        // 脚下已经有方块 → 玩家没走到新位置，跳过
+        if (!isReplaceable(below)) {
+            return;
+        }
 
         BlockData data = getBlockData(below);
         if (data == null) {
@@ -190,18 +215,44 @@ public class Scaffold extends Module {
         }
     }
 
+    // ==================== 渲染 ====================
+
     @EventListener
     public void onRender(Render2DEvent event) {
         if (!this.isEnabled()) return;
         if (!NullPointHelper.isPlayerInWorld()) return;
 
-        String text = "Blocks: " + getBlockCount();
-        ScaledResolution scaledResolution = new ScaledResolution(mc);
+        ScaledResolution sr = new ScaledResolution(mc);
 
-        int x = scaledResolution.getScaledWidth() / 2 + 10;
-        int y = scaledResolution.getScaledHeight() / 2;
-        mc.fontRendererObj.drawStringWithShadow(text, x, y, 0xFFFFFF);
+        int count = getBlockCount();
+        String text = "Blocks: " + count;
+
+        int textW = mc.fontRendererObj.getStringWidth(text);
+        int boxW = textW + 10;
+        int boxH = mc.fontRendererObj.FONT_HEIGHT + 6;
+
+        int x = sr.getScaledWidth() / 2 + 12;
+        int y = sr.getScaledHeight() / 2 - boxH / 2;
+
+        // 背景
+        RenderUtil.drawRoundedRect(x, y, boxW, boxH, 3, 0xB0101010);
+
+        // 左侧色条
+        int barColor = count > 64 ? 0xFF4ADE80
+                : count > 0  ? 0xFFFBBA24
+                : 0xFFEF4444;
+        RenderUtil.drawRoundedRect(x + 1, y + 3, 2, boxH - 6, 1F, barColor);
+
+        // 文字
+        mc.fontRendererObj.drawStringWithShadow(
+                text,
+                x + 2 + 4,
+                y + (boxH - mc.fontRendererObj.FONT_HEIGHT) / 2 + 1,
+                0xFFFFFFFF
+        );
     }
+
+    // ==================== 旋转 ====================
 
     private void applyRotation(float yaw, float pitch) {
         if (silent.getValue()) {
@@ -281,6 +332,16 @@ public class Scaffold extends Module {
 
     // ==================== 工具 ====================
 
+    /**
+     * 玩家是否正在移动（按了 WASD 任意一个）
+     */
+    private boolean isMoving() {
+        return mc.gameSettings.keyBindForward.isKeyDown()
+                || mc.gameSettings.keyBindBack.isKeyDown()
+                || mc.gameSettings.keyBindLeft.isKeyDown()
+                || mc.gameSettings.keyBindRight.isKeyDown();
+    }
+
     private boolean isReplaceable(BlockPos pos) {
         if (isInRecent(pos)) return false;
         if (mc.theWorld == null) return false;
@@ -303,7 +364,7 @@ public class Scaffold extends Module {
     private boolean isInRecent(BlockPos pos) {
         Integer t = recentlyPlaced.get(pos);
         if (t == null) return false;
-        if (currentTick - t > 10) {
+        if (currentTick - t > 100) {
             recentlyPlaced.remove(pos);
             return false;
         }
@@ -380,6 +441,8 @@ public class Scaffold extends Module {
         }
         return blockCount;
     }
+
+    // ==================== 数据类 ====================
 
     private static class BlockData {
         final BlockPos pos;
