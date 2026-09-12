@@ -1,17 +1,19 @@
-# IntelliJ
 .idea/
 *.iml
 *.iws
 out/
 
-# 项目输出
 build/
 /bin/
 
-# 用户配置（每个用户不同）
-ethereal/config.json
-*.log
+jars/ethereal/config.json
+jars/saves/
+jars/assets/skins/
+jars/resourcepacks/
+jars/logs/
+jars/versions/
+jars/libraries/
+jars/crash-reports/
 
-# 系统
 .DS_Store
 Thumbs.db
